@@ -1,10 +1,8 @@
 <?php
 
-define('DATASTORAGE', '/FileStore/DataLogging/MBusOgVer');
-
 date_default_timezone_set('Europe/Oslo');
 
-$dataPath = DATASTORAGE . '/' . date('Y') . '/' . date('W');
+$DataStorage = getenv('DATASTORAGE') ?: '/FileStore/DataLogging/MBusOgVer';
 
 function zipAllWeeks(
 	$path,
@@ -50,7 +48,7 @@ function zipAllWeeks(
 // zip up all entries for this and previous year ... 
 // - earlier years are assumed to already have been processed
 // - previous year is so the last week of a year will be processed - i.e.: when it rolls over around new-years
-zipAllWeeks(DATASTORAGE, date('Y'));
-zipAllWeeks(DATASTORAGE, date('Y', mktime(0, 0, 0, date('m'), date('d'), date('Y')-1)));
+zipAllWeeks($DataStorage, date('Y'));
+zipAllWeeks($DataStorage, date('Y', mktime(0, 0, 0, date('m'), date('d'), date('Y')-1)));
 
 ?>

@@ -1,8 +1,8 @@
 <?php
 
-define('DATASTORAGE', '/FileStore/DataLogging/MBusOgVer');
-
 date_default_timezone_set('Europe/Oslo');
+
+$DataStorage = getenv('DATASTORAGE') ?: '/FileStore/DataLogging/MBusOgVer';
 
 define('GENERAL_TIME', '1_1');
 
@@ -84,7 +84,7 @@ if (isset($options['t']) !== false)
 
 if (isset($options['t']) !== false)
 {
-	$path = DATASTORAGE;
+	$path = $DataStorage;
 	$path .= '/' . $year . '/' . $week;
 	processFile($data, $path . '/fyrrom-' . $time . '.xml');
 	processFile($data, $path . '/energy-' . $time . '.xml');
@@ -258,7 +258,7 @@ function processAllFiles(
 	$year='',
 	$week='')
 {
-	$path = DATASTORAGE;
+	$path = $DataStorage;
 	if (empty($year) === false)
 	{
 		$path .= '/' . $year;

@@ -1,14 +1,12 @@
 <?php
 
-define('WEATHERDATA_FILE', '/var/www/html/weewx/xmldata.xml');
-define('DATASTORAGE', '/FileStore/DataLogging/MBusOgVer');
 define('CONSOLIDATE_CMD', '/root/bin/consolidateData.php');
 define('MBUS_CMD', '/usr/local/bin/mbus-tcp-request-data');
-define('MBUS_GW', '192.168.20.70');
-define('MBUS_GW_PORT', '10001');
-define('ENERGY_ID', '10');
-define('FYRROM_ID', '20');
 
+$WeatherDataFile = getenv('WEATHERDATA_FILE') ?: '/var/www/html/weewx/xmldata.xml';
+$DataStorage = getenv('DATASTORAGE') ?: '/FileStore/DataLogging/MBusOgVer';
+$MbusDeviceAddress = getenv('MBUS_GW_ADDRESS') ?: '192.168.1.10';
+$MbusDevicePort = getenv('MBUS_GW_PORT') ?: '10001';
 
 $devices = array(
 	'ENERGY' => array(
@@ -21,26 +19,29 @@ $devices = array(
 
 date_default_timezone_set('Europe/Oslo');
 
-$dataPath = DATASTORAGE . '/' . date('Y') . '/' . date('W');
+$dateYear = date('Y');
+$dateWeek = date('W');
+# $dateFormat = date('d-M-Y-His');
+$dateFormat = date('U');
+
+$dataPath = $DataStorage . '/' . $dateYear . '/' . $dateWeek;
 if (file_exists($dataPath) === false)
 {
 	mkdir($dataPath, 0777, true);
 }
 
-# $dateFormat = date('d-M-Y-His');
-$dateFormat = date('U');
-if (file_exists(WEATHERDATA_FILE) === true)
+if (file_exists($WeatherDataFile) === true)
 {
-	rename(WEATHERDATA_FILE, $dataPath . '/weather-' . $dateFormat . '.xml');
+	rename($WeatherDataFile, $dataPath . '/weather-' . $dateFormat . '.xml');
 }
 
 foreach ($devices as $dev => $data)
 {
-	$cmd = MBUS_CMD . ' ' . MBUS_GW . ' ' . MBUS_GW_PORT . ' ' . $data['id']  . ' > ' . $dataPath . '/' . $data['name'] . '-' . $dateFormat . '.xml';
+	$cmd = MBUS_CMD . ' ' . $MbusDeviceAddress . ' ' . $MbusDevicePort . ' ' . $data['id']  . ' > ' . $dataPath . '/' . $data['name'] . '-' . $dateFormat . '.xml';
 	exec($cmd);
 }
 
-$cmd = 'php ' . CONSOLIDATE_CMD . ' -y ' . date('Y') . ' -w ' . date('W') . ' -t ' . $dateFormat;
+$cmd = 'php ' . CONSOLIDATE_CMD . ' -y ' . $dateYear . ' -w ' . $dateWeek . ' -t ' . $dateFormat;
 exec($cmd);
 
 

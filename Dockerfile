@@ -15,10 +15,10 @@ RUN curl -o /tmp/libmbus.tar.gz ${LIBMBUS_URL}; \
     make; \
     make install
 
-ADD m-bus-cron /etc/cron.d/
+ADD device-collection-cron /etc/cron.d/
 
 RUN touch /var/log/cron.log; \
-    crontab /etc/cron.d/m-bus-cron
+    crontab /etc/cron.d/device-collection-cron
 
 COPY bin /usr/local/bin
 
