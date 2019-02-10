@@ -1,6 +1,6 @@
 <?php
 
-define('CONSOLIDATE_CMD', '/root/bin/consolidateData.php');
+define('CONSOLIDATE_CMD', '/usr/local/bin/consolidateData.php');
 define('MBUS_CMD', '/usr/local/bin/mbus-tcp-request-data');
 
 $WeatherDataFile = getenv('WEATHERDATA_FILE') ?: '/var/www/html/weewx/xmldata.xml';
