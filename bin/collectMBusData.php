@@ -3,10 +3,12 @@
 define('CONSOLIDATE_CMD', '/usr/local/bin/consolidateData.php');
 define('MBUS_CMD', '/usr/local/bin/mbus-tcp-request-data');
 
-$WeatherDataFile = getenv('WEATHERDATA_FILE') ?: '/var/www/html/weewx/xmldata.xml';
-$DataStorage = getenv('DATASTORAGE') ?: '/FileStore/DataLogging/MBusOgVer';
-$MbusDeviceAddress = getenv('MBUS_GW_ADDRESS') ?: '192.168.1.10';
-$MbusDevicePort = getenv('MBUS_GW_PORT') ?: '10001';
+$ConfigData = parse_ini_file("/etc/ddc.conf");
+
+$WeatherDataFile = getenv('WEATHERDATA_FILE') ?: $ConfigData['WEATHERDATA_FILE'] ?: '/var/www/html/weewx/xmldata.xml';
+$DataStorage = getenv('DATASTORAGE') ?: $ConfigData['DATASTORAGE'] ?: '/FileStore/DataLogging/MBusOgVer';
+$MbusDeviceAddress = getenv('MBUS_GW_ADDRESS') ?: $ConfigData['MBUS_GW_ADDRESS'] ?: '192.168.1.10';
+$MbusDevicePort = getenv('MBUS_GW_PORT') ?: $ConfigData['MBUS_GW_PORT'] ?: '10001';
 
 $devices = array(
 	'ENERGY' => array(

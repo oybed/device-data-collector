@@ -2,7 +2,8 @@
 
 date_default_timezone_set('Europe/Oslo');
 
-$DataStorage = getenv('DATASTORAGE') ?: '/FileStore/DataLogging/MBusOgVer';
+$ConfigData = parse_ini_file("/etc/ddc.conf");
+$DataStorage = getenv('DATASTORAGE') ?: $ConfigData['DATASTORAGE'] ?: '/FileStore/DataLogging/MBusOgVer';
 
 define('GENERAL_TIME', '1_1');
 
