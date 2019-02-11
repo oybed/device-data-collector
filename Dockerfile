@@ -6,7 +6,7 @@ ENV LIBMBUS_VER 0.8.0
 ENV LIBMBUS_URL http://www.rscada.se/public-dist/libmbus-${LIBMBUS_VER}.tar.gz
 
 RUN yum -y update; \
-    yum install -y php cronie gcc make
+    yum install -y php cronie gcc make zip
 
 RUN curl -o /tmp/libmbus.tar.gz ${LIBMBUS_URL}; \
     tar -xzf /tmp/libmbus.tar.gz; \
